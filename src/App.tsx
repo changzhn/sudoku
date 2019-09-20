@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
 import Checkerboard from './components/Checkerboard';
 import ControllBar from './components/ControllBar';
-import pageStore, { Block, Controll } from './state';
+import pageStore, { SudokuStore } from './state';
 import * as events from './events';
 import './App.css';
 
 
 interface IProps {
-  pageStore: {
-    checkerboardData: Block[][],
-    controllBar: Controll[],
-  };
+  pageStore: SudokuStore;
 }
 
 export class App extends Component<IProps> {
@@ -22,6 +19,7 @@ export class App extends Component<IProps> {
         Sudoku Game
         <Checkerboard 
           checkerboardData={checkerboardData} 
+          blockClick={events.blockClick.bind(this)}
         />
         <ControllBar 
           controllBar={controllBar} 

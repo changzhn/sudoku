@@ -5,9 +5,10 @@ import classnames from 'classnames';
 
 interface IProps {
   checkerboardData: Block[][];
+  blockClick: (block: Block) => void;
 }
 
-const Checkerboard: React.SFC<IProps> = ({ checkerboardData }) => {
+const Checkerboard: React.SFC<IProps> = ({ checkerboardData, blockClick }) => {
 
   return (
     <div className="checkerboard">
@@ -28,11 +29,21 @@ const Checkerboard: React.SFC<IProps> = ({ checkerboardData }) => {
           return (
             <div key={rowIdx} className={cls}>
               {
-                row.map((col, colIdx) => (
-                  <span key={colIdx} className="checkerboard-block">
-                    { col.num }
-                  </span>
-                ))
+                row.map((col, colIdx) => {
+                  const blockCls = classnames({
+                    'checkerboard-block': true,
+                    'is-choosed': col.isChoosed,
+                  });
+                  return (
+                    <span 
+                      key={colIdx} 
+                      className={blockCls}
+                      onClick={() => blockClick(col)}
+                    >
+                      { col.num }
+                    </span>
+                  )
+                })
               }
             </div>
           )

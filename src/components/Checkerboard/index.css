@@ -28,6 +28,10 @@
   user-select: none;
 }
 
+.checkerboard-block.is-choosed {
+  background: skyblue;
+}
+
 .checkerboard-block:last-child {
   border-right: none;
 }
