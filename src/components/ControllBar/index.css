@@ -1,0 +1,27 @@
+.controll-bar {
+  margin: 0 auto;
+  width: 360px;
+  height: 40px;
+}
+
+.controll-item {
+  display: inline-block;
+  margin-left: 5px;
+  margin-right: 5px;
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  border: 1px solid #333;
+  line-height: 30px;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.controll-item.active:hover {
+  box-shadow: 3px 3px 3px #eee;
+}
+
+.controll-item.forbidden:hover {
+  cursor: not-allowed;
+}
