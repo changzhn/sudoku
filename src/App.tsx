@@ -15,8 +15,7 @@ interface IProps {
 export class App extends Component<IProps> {
 
   render() {
-    const { pageStore: { checkerboardData, controllBar, choosedBlock } } = this.props;
-    // console.log(choosedBlock)
+    const { pageStore: { checkerboardData, controllBar } } = this.props;
     return (
       <div className="App">
         Sudoku Game

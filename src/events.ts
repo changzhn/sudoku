@@ -14,4 +14,5 @@ export function barClick(this: App, controll: Controll) {
   if (!controll.status) {
     return;
   }
+  this.props.pageStore.fillNum(controll.num);
 }

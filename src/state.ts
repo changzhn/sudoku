@@ -39,7 +39,7 @@ const checkerboardData: any = initSquare.map((row, rowIdx) => {
 
 export class Controll {
 	@observable public num: number;
-	@observable public status: boolean = true;
+	@observable public status: boolean = false;
 
 	constructor(num: number) {
 		this.num = num;
@@ -71,19 +71,20 @@ export class SudokuStore {
 
 
     this.checkerboardData.forEach(row => {
+      // 查找的数字不要包括该数据格的数据
       row.forEach(block => {
-        const { palaceKey, rowKey, colKey } = block;
-        if (block.num) {
+        const { palaceKey, rowKey, colKey, num } = block;
+        if (!(rowKey === targetRowKey && colKey === targetColKey) && num) {
           if (rowKey === targetRowKey) {
-            rowFilledNums.push(block.num);
+            rowFilledNums.push(num);
           }
 
           if (colKey === targetColKey) {
-            colFilledNums.push(block.num);
+            colFilledNums.push(num);
           }
 
           if (palaceKey === targetPalaceKey) {
-            palaceFilledNums.push(block.num);
+            palaceFilledNums.push(num);
           }
         }
       })
@@ -98,7 +99,19 @@ export class SudokuStore {
       return bar;
     })
 
-    console.log(activeNums);
+  }
+
+  @action public fillNum(num: number) {
+    const { rowKey, colKey } = this.choosedBlock as IBlock;
+    this.checkerboardData = this.checkerboardData.map(row => {
+      row = row.map(col => {
+        if (col.rowKey === rowKey && col.colKey === colKey) {
+          col.num = num;
+        }
+        return col;
+      })
+      return row;
+    })
   }
 }
 
