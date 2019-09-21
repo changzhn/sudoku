@@ -25,7 +25,7 @@ const Checkerboard: React.SFC<IProps> = ({ checkerboardData, blockClick }) => {
           const cls = classnames({
             'checkerboard-row': true,
             'last-row': rowIdx === checkerboardData.length - 1,
-            'multiple-of-three': rowIdx % 2 === 0,
+            'multiple-of-three': rowIdx % 3 === 2,
           })
           return (
             <div key={rowIdx} className={cls}>
@@ -34,6 +34,7 @@ const Checkerboard: React.SFC<IProps> = ({ checkerboardData, blockClick }) => {
                   const blockCls = classnames({
                     'checkerboard-block': true,
                     'is-choosed': col.isChoosed,
+                    'is-inited': col.isInitBlock,
                   });
                   return (
                     <span 
