@@ -1,11 +1,12 @@
 import * as React from 'react';
 import './index.css';
-import { Block, rowKeys, colKeys } from '../../state';
+import { rowKeys, colKeys } from '../../state';
 import classnames from 'classnames';
+import { IBlock } from '../../interface';
 
 interface IProps {
-  checkerboardData: Block[][];
-  blockClick: (block: Block) => void;
+  checkerboardData: IBlock[][];
+  blockClick: (block: IBlock) => void;
 }
 
 const Checkerboard: React.SFC<IProps> = ({ checkerboardData, blockClick }) => {

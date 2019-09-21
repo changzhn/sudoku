@@ -1,8 +1,9 @@
 import { App } from './App';
-import { Block, Controll } from './state';
+import { Controll } from './state';
+import { IBlock } from './interface';
 
-export function blockClick(this: App, block: Block) {
-  if (block.isInit) {
+export function blockClick(this: App, block: IBlock) {
+  if (block.isInitBlock) {
     return;
   }
   const { pageStore } = this.props;

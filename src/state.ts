@@ -1,32 +1,28 @@
 import { observable, action } from "mobx";
 import initSquare from "./initSquare";
+import { IBlock } from './interface';
 
 export const colKeys = "ABCDEFGHI";
 export const rowKeys = "123456789";
 
-export class Block {
-	@observable public num: number | null = null;
-  @observable public isChoosed: boolean = false;
-	public rowKey: string;
-  public colKey: string;
-  public isInit: boolean;
+const createBlock: (opt: { num: number | null, rowKey: string, colKey: string }) => IBlock = 
+  ({ num, rowKey, colKey }) => ({
+    num,
+    rowKey,
+    colKey,
+    isChoosed: false,
+    isInitBlock: !!num,
+  });
 
-	constructor(num: number | null, rowKey: string, colKey: string) {
-		this.num = num;
-		this.rowKey = rowKey;
-    this.colKey = colKey;
-    this.isInit = !!num;
-	}
-}
-
-const checkerboardData: Block[][] = initSquare.map((row, rowIdx) => {
+const checkerboardData: any = initSquare.map((row, rowIdx) => {
 	// row
 	const rowKey = rowKeys[rowIdx];
 
 	return row.map((col, colIdx) => {
 		const colKey = colKeys[colIdx];
 
-		return new Block(col, rowKey, colKey);
+		// return new Block(col, rowKey, colKey);
+		return createBlock({ num: col, rowKey, colKey });
 	});
 });
 
@@ -44,11 +40,12 @@ const controllBar: Controll[] = rowKeys
 	.map(key => new Controll(+key));
 
 export class SudokuStore {
-	@observable public checkerboardData: Block[][] = checkerboardData;
+	@observable public checkerboardData: IBlock[][] = checkerboardData;
   @observable public controllBar: Controll[] = controllBar;
-  @observable public choosedBlock: Block | null = null;
+  @observable public choosedBlock: IBlock | null = null;
+  @observable public x: number = 0;
   
-  @action public chooseBlock(block: Block) {
+  @action public chooseBlock(block: IBlock) {
     if (this.choosedBlock) {
       this.choosedBlock.isChoosed = false;
     }

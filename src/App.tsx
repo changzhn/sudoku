@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Checkerboard from './components/Checkerboard';
 import ControllBar from './components/ControllBar';
+import { observer } from 'mobx-react';
 import pageStore, { SudokuStore } from './state';
 import * as events from './events';
 import './App.css';
@@ -10,10 +11,12 @@ interface IProps {
   pageStore: SudokuStore;
 }
 
+@observer
 export class App extends Component<IProps> {
 
   render() {
-    const { pageStore: { checkerboardData, controllBar } } = this.props;
+    const { pageStore: { checkerboardData, controllBar, choosedBlock } } = this.props;
+    // console.log(choosedBlock)
     return (
       <div className="App">
         Sudoku Game
