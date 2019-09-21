@@ -18,6 +18,10 @@
   user-select: none;
 }
 
+.controll-item.active {
+  background: #98c05c;
+}
+
 .controll-item.active:hover {
   box-shadow: 3px 3px 3px #eee;
 }

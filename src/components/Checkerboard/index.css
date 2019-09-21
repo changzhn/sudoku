@@ -48,6 +48,11 @@
   border-bottom: none;
 }
 
+.is-inited {
+  background: #ddd;
+  cursor: not-allowed;
+}
+
 .coordinate-row {
   position: absolute;
   left: 0;

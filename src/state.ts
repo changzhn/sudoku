@@ -2,17 +2,28 @@ import { observable, action } from "mobx";
 import initSquare from "./initSquare";
 import { IBlock } from './interface';
 
-export const colKeys = "ABCDEFGHI";
-export const rowKeys = "123456789";
+export const rowKeys = Array(9).fill(0).map((_, idx) => idx);
+export const colKeys = rowKeys;
+export const controllKeys = rowKeys.map(n => n + 1);
 
-const createBlock: (opt: { num: number | null, rowKey: string, colKey: string }) => IBlock = 
-  ({ num, rowKey, colKey }) => ({
-    num,
-    rowKey,
-    colKey,
-    isChoosed: false,
-    isInitBlock: !!num,
-  });
+function getPalaceKey(rowKey: number, colKey: number): number {
+  const palaceKey = Math.floor(rowKey / 3) * 3 + Math.floor(colKey / 3) + 1;
+  return palaceKey;
+}
+
+const createBlock: (opt: { num: number | null, rowKey: number, colKey: number }) => IBlock = 
+  ({ num, rowKey, colKey }) => {
+    const rowIdx = rowKeys.indexOf(rowKey);
+    const colIdx = colKeys.indexOf(colKey);
+    return {
+      num,
+      rowKey: rowIdx,
+      colKey: colIdx,
+      palaceKey: getPalaceKey(rowIdx, colIdx),
+      isChoosed: false,
+      isInitBlock: !!num,
+    };
+  };
 
 const checkerboardData: any = initSquare.map((row, rowIdx) => {
 	// row
@@ -35,9 +46,7 @@ export class Controll {
 	}
 }
 
-const controllBar: Controll[] = rowKeys
-	.split("")
-	.map(key => new Controll(+key));
+const controllBar: Controll[] = controllKeys.map(key => new Controll(key));
 
 export class SudokuStore {
 	@observable public checkerboardData: IBlock[][] = checkerboardData;
@@ -51,6 +60,45 @@ export class SudokuStore {
     }
     block.isChoosed = true;
     this.choosedBlock = block;
+    this.calcControllBar();
+  }
+
+  @action public calcControllBar() {
+    const { rowKey: targetRowKey, colKey: targetColKey, palaceKey: targetPalaceKey } = this.choosedBlock as IBlock;
+    const rowFilledNums: number[] = [];
+    const colFilledNums: number[] = [];
+    const palaceFilledNums: number[] = [];
+
+
+    this.checkerboardData.forEach(row => {
+      row.forEach(block => {
+        const { palaceKey, rowKey, colKey } = block;
+        if (block.num) {
+          if (rowKey === targetRowKey) {
+            rowFilledNums.push(block.num);
+          }
+
+          if (colKey === targetColKey) {
+            colFilledNums.push(block.num);
+          }
+
+          if (palaceKey === targetPalaceKey) {
+            palaceFilledNums.push(block.num);
+          }
+        }
+      })
+    });
+
+    const filledNums: Set<number> = new Set([...rowFilledNums, ...colFilledNums, ...palaceFilledNums]);
+    const allNums: Set<number> = new Set(controllKeys);
+    const activeNums: number[] = [...new Set([...allNums].filter(x => !filledNums.has(x)))];
+
+    this.controllBar = this.controllBar.map(bar => {
+      bar.status = activeNums.includes(bar.num);
+      return bar;
+    })
+
+    console.log(activeNums);
   }
 }
 

@@ -15,7 +15,7 @@ const Checkerboard: React.SFC<IProps> = ({ checkerboardData, blockClick }) => {
     <div className="checkerboard">
       <div className="coordinate-row">
         {
-          colKeys.split('').map(key => (
+          colKeys.map(key => (
             <span key={key} className="coordinate-block">{ key }</span>
           ))
         }
@@ -53,7 +53,7 @@ const Checkerboard: React.SFC<IProps> = ({ checkerboardData, blockClick }) => {
       }
       <div className="coordinate-col">
         {
-          rowKeys.split('').map(key => (
+          rowKeys.map(key => (
             <span key={key} className="coordinate-block">{ key }</span>
           ))
         }
