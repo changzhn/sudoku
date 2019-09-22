@@ -1,5 +1,5 @@
 import { observable, action } from "mobx";
-import initSquare from "./initSquare";
+import someState, { initState } from "./initSquare";
 import { IBlock } from './interface';
 
 export const rowKeys = Array(9).fill(0).map((_, idx) => idx);
@@ -9,6 +9,17 @@ export const controllKeys = rowKeys.map(n => n + 1);
 function getPalaceKey(rowKey: number, colKey: number): number {
   const palaceKey = Math.floor(rowKey / 3) * 3 + Math.floor(colKey / 3) + 1;
   return palaceKey;
+}
+
+function createCheckerboardState(nums: Array<Array<number | null>>) {
+  const checkerboardData: any = nums.map((row, rowIdx) => {
+    const rowKey = rowKeys[rowIdx];
+    return row.map((col, colIdx) => {
+      const colKey = colKeys[colIdx];
+      return createBlock({ num: col, rowKey, colKey });
+    });
+  });
+  return checkerboardData;
 }
 
 const createBlock: (opt: { num: number | null, rowKey: number, colKey: number }) => IBlock = 
@@ -25,18 +36,6 @@ const createBlock: (opt: { num: number | null, rowKey: number, colKey: number })
     };
   };
 
-const checkerboardData: any = initSquare.map((row, rowIdx) => {
-	// row
-	const rowKey = rowKeys[rowIdx];
-
-	return row.map((col, colIdx) => {
-		const colKey = colKeys[colIdx];
-
-		// return new Block(col, rowKey, colKey);
-		return createBlock({ num: col, rowKey, colKey });
-	});
-});
-
 export class Controll {
 	@observable public num: number | null;
 	@observable public status: boolean = false;
@@ -49,13 +48,13 @@ export class Controll {
 const controllBar: Controll[] = controllKeys.map(key => new Controll(key));
 
 export class SudokuStore {
-	@observable public checkerboardData: IBlock[][] = checkerboardData;
+	@observable public checkerboardData: IBlock[][] = createCheckerboardState(initState);
   @observable public controllBar: Controll[] = controllBar;
   @observable public choosedBlock: IBlock | null = null;
 
   @action public startGame() {
-    this.checkerboardData = checkerboardData;
-    this.controllBar = controllBar;
+    this.checkerboardData = createCheckerboardState(someState);
+    this.controllBar = controllKeys.map(key => new Controll(key));
     this.choosedBlock = null;
   }
   

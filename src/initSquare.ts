@@ -1,3 +1,5 @@
+export const initState: Array<Array<null>> = Array(9).fill(0).map(_ => Array(9).fill(null));
+
 const d: Array<Array<number | null>> = [
   [null, 7, null, null, null, 8, null, null, null],
   [null, null, null, 4, null, null, 2, null, null],
