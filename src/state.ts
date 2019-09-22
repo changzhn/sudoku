@@ -38,7 +38,7 @@ const checkerboardData: any = initSquare.map((row, rowIdx) => {
 });
 
 export class Controll {
-	@observable public num: number;
+	@observable public num: number | null;
 	@observable public status: boolean = false;
 
 	constructor(num: number) {
@@ -95,13 +95,13 @@ export class SudokuStore {
     const activeNums: number[] = [...new Set([...allNums].filter(x => !filledNums.has(x)))];
 
     this.controllBar = this.controllBar.map(bar => {
-      bar.status = activeNums.includes(bar.num);
+      bar.status = activeNums.includes(bar.num as number);
       return bar;
     })
 
   }
 
-  @action public fillNum(num: number) {
+  @action public fillNum(num: number | null) {
     const { rowKey, colKey } = this.choosedBlock as IBlock;
     this.checkerboardData = this.checkerboardData.map(row => {
       row = row.map(col => {

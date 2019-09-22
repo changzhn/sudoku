@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Checkerboard from './components/Checkerboard';
 import ControllBar from './components/ControllBar';
+import BlockStatus from './components/BlockStatus';
 import { observer } from 'mobx-react';
 import pageStore, { SudokuStore } from './state';
 import * as events from './events';
@@ -15,18 +16,28 @@ interface IProps {
 export class App extends Component<IProps> {
 
   render() {
-    const { pageStore: { checkerboardData, controllBar } } = this.props;
+    const { pageStore: { checkerboardData, controllBar, choosedBlock } } = this.props;
     return (
       <div className="App">
-        Sudoku Game
-        <Checkerboard 
-          checkerboardData={checkerboardData} 
-          blockClick={events.blockClick.bind(this)}
-        />
-        <ControllBar 
-          controllBar={controllBar} 
-          barClick={events.barClick.bind(this)}
-        />
+        <div className="left">
+          Sudoku Game
+          <Checkerboard 
+            checkerboardData={checkerboardData} 
+            blockClick={events.blockClick.bind(this)}
+          />
+          <ControllBar 
+            controllBar={controllBar} 
+            choosedBlock={choosedBlock}
+            barClick={events.barClick.bind(this)}
+          />
+        </div>
+        {/* <div className="right">
+          Dashboard
+          <BlockStatus 
+            choosedBlock={choosedBlock} 
+            controllBar={controllBar} 
+          />
+        </div> */}
       </div>
     );
   }

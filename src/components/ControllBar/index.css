@@ -6,8 +6,8 @@
 
 .controll-item {
   display: inline-block;
-  margin-left: 5px;
-  margin-right: 5px;
+  margin-left: 2px;
+  margin-right: 2px;
   width: 30px;
   height: 30px;
   border-radius: 15px;
@@ -20,6 +20,10 @@
 
 .controll-item.active {
   background: #98c05c;
+}
+
+.controll-item.clear {
+  background: #FF0033;
 }
 
 .controll-item.active:hover {

@@ -2,13 +2,19 @@ import * as React from 'react';
 import { Controll } from '../../state';
 import './index.css';
 import classnames from 'classnames';
+import { IBlock } from '../../interface';
 
 interface IProps {
   controllBar: Controll[];
+  choosedBlock: IBlock | null;
   barClick: (col: Controll) => void;
 }
 
-const ControllBar: React.SFC<IProps> = ({ controllBar, barClick }) => {
+const ControllBar: React.SFC<IProps> = ({ controllBar, barClick, choosedBlock }) => {
+  const clearCls = classnames({
+    'controll-item': true,
+    'clear': choosedBlock && choosedBlock.num,
+  });
   return (
     <div className="controll-bar">
       {
@@ -20,13 +26,17 @@ const ControllBar: React.SFC<IProps> = ({ controllBar, barClick }) => {
           })
           return (
             <span 
-              key={col.num} 
+              key={col.num as number} 
               className={cls}
               onClick={() => barClick(col)}
             >{ col.num }</span>
           )
         })
       }
+      <span 
+        className={clearCls}
+        onClick={() => barClick({ status: true, num: null })}
+      >X</span>
     </div>
   );
 };
