@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Checkerboard from './components/Checkerboard';
 import ControllBar from './components/ControllBar';
 import BlockStatus from './components/BlockStatus';
+import GameStatus from './components/GameStatus';
 import { observer } from 'mobx-react';
 import pageStore, { SudokuStore } from './state';
 import * as events from './events';
@@ -31,13 +32,16 @@ export class App extends Component<IProps> {
             barClick={events.barClick.bind(this)}
           />
         </div>
-        {/* <div className="right">
+        <div className="right">
           Dashboard
-          <BlockStatus 
+          <GameStatus 
+            start={events.startGame.bind(this)}
+          />
+          {choosedBlock && <BlockStatus 
             choosedBlock={choosedBlock} 
             controllBar={controllBar} 
-          />
-        </div> */}
+          />}
+        </div>
       </div>
     );
   }

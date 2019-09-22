@@ -3,8 +3,8 @@ import './index.css';
 import classnames from 'classnames';
 import { IBlock } from '../../interface';
 
-const rownames = '123456789';
-const colnames = 'ABCDEFGHI';
+export const rownames = '123456789';
+export const colnames = 'ABCDEFGHI';
 
 interface IProps {
   checkerboardData: IBlock[][];

@@ -52,7 +52,12 @@ export class SudokuStore {
 	@observable public checkerboardData: IBlock[][] = checkerboardData;
   @observable public controllBar: Controll[] = controllBar;
   @observable public choosedBlock: IBlock | null = null;
-  @observable public x: number = 0;
+
+  @action public startGame() {
+    this.checkerboardData = checkerboardData;
+    this.controllBar = controllBar;
+    this.choosedBlock = null;
+  }
   
   @action public chooseBlock(block: IBlock) {
     if (this.choosedBlock) {
@@ -102,7 +107,10 @@ export class SudokuStore {
   }
 
   @action public fillNum(num: number | null) {
-    const { rowKey, colKey } = this.choosedBlock as IBlock;
+    if (!this.choosedBlock) {
+      return;
+    }
+    const { rowKey, colKey } = this.choosedBlock;
     this.checkerboardData = this.checkerboardData.map(row => {
       row = row.map(col => {
         if (col.rowKey === rowKey && col.colKey === colKey) {

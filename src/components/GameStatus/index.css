@@ -1,0 +1,23 @@
+.game-status-container {
+  background: #fff;
+  text-align: left;
+  margin: 20px 0;
+  padding: 10px;
+  border: 1px solid #333;
+  border-radius: 4px;
+}
+
+.game-user {
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.avatar {
+  widows: 40px;
+  height: 40px;
+  border-radius: 20px;
+}

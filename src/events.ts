@@ -2,6 +2,10 @@ import { App } from './App';
 import { Controll } from './state';
 import { IBlock } from './interface';
 
+export function startGame(this: App) {
+  this.props.pageStore.startGame();
+}
+
 export function blockClick(this: App, block: IBlock) {
   if (block.isInitBlock) {
     return;
