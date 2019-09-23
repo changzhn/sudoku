@@ -1,5 +1,5 @@
 import { IBlock } from './interface';
-import { rowKeys, colKeys, controllKeys } from './constants';
+import { rowKeys, colKeys, controllKeys,baseNums } from './constants';
 
 export class Controll {
 	public num: number | null;
@@ -43,6 +43,27 @@ class Utils {
     });
     return checkerboardData;
   }
+
+  public static random(start: number, end: number) {
+		return Math.floor(Math.random() * (end + 1 - start) + start);
+	}
+
+	public static randomOne2Nine() {
+		const nums = [...baseNums];
+		Utils.randomArray(nums);
+		return nums;
+	}
+
+	public static randomArray(array: any[]) {
+		const len = array.length - 1;
+		Array(10)
+			.fill(0)
+			.forEach(() => {
+				const start = Utils.random(0, len);
+				const end = Utils.random(0, len);
+				[array[start], array[end]] = [array[end], array[start]];
+			});
+	}
 }
 
 export default Utils;
