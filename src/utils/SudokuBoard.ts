@@ -23,13 +23,17 @@ export class Grid {
 
 export default class SudokuStore {
   public grids: Grid[][];
-  public array: number[][];
+	public fullArray: number[][];
+	public incompleteArray: Array<Array<number | null>>;
 
 	constructor() {
 		this.grids = this.generateGrids();
 		this.fillFirstRow();
     this.fillRows();
-    this.array = this.toArray() as number[][];
+		this.fullArray = this.toArray() as number[][];
+		this.incompleteArray = this.digHoles(30);
+
+		console.log(this.fullArray, this.incompleteArray)
 	}
 
 	public generateGrids() {
@@ -159,5 +163,20 @@ export default class SudokuStore {
 
 	toArray() {
 		return this.grids.map(row => row.map(grid => grid.num));
+	}
+
+	digHoles(num: number) {
+		const fullArray: Array<Array<number | null>> = this.fullArray.map(row => row.map(grid => grid));
+		const holes = 81 - num;
+		let digs = 0;
+		while(digs < holes) {
+			const i = Utils.random(0, 8);
+			const j = Utils.random(0, 8);
+			if (fullArray[i][j]) {
+				fullArray[i][j] = null;
+				digs++;
+			}
+		}
+		return fullArray
 	}
 }

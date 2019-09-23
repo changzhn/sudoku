@@ -47,8 +47,7 @@ class Board {
     this.grids = this.generateGrids();
     this.fillFirstRow();
     this.fillRows();
-    let array = this.toArray();
-    return array;
+    this.toArray();
   }
 
   generateGrids() {
@@ -161,9 +160,14 @@ class Board {
   }
 
   toArray() {
-    return this.grids.map(row => row.map(grid => grid.num))
+    return this.grids.map(row => row.map(grid => {
+      if (!grid.num) {
+        console.log('failed');
+        debugger
+      }
+      return grid.num;
+    }))
   }
 }
 
-Array(10).fill(0).forEach(() => 
-console.log(new Board()))
+Array(100).fill(0).forEach(() => new Board())

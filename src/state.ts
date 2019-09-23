@@ -5,12 +5,19 @@ import { controllKeys } from './utils/constants';
 import SudokuBoard from './utils/SudokuBoard';
 
 export class SudokuStore {
-	@observable public checkerboardData: IBlock[][] = Utils.generateCheckerboardState(new SudokuBoard().array);
-  @observable public controllBar: Controll[] = Utils.generateControllBar();
+  public fullData: IBlock[][] = [];
+	@observable public checkerboardData: IBlock[][] = [];
+  @observable public controllBar: Controll[] = [];
   @observable public choosedBlock: IBlock | null = null;
 
+  constructor() {
+    this.startGame();
+  }
+
   @action public startGame() {
-    this.checkerboardData = Utils.generateCheckerboardState(new SudokuBoard().array);
+    const sudokuBoard = new SudokuBoard();
+    this.fullData = Utils.generateCheckerboardState(sudokuBoard.fullArray);
+    this.checkerboardData = Utils.generateCheckerboardState(sudokuBoard.incompleteArray);
     this.controllBar = controllKeys.map(key => new Controll(key));
     this.choosedBlock = null;
   }
