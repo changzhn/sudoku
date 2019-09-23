@@ -17,11 +17,12 @@ interface IProps {
 export class App extends Component<IProps> {
 
   render() {
-    const { pageStore: { checkerboardData, controllBar, choosedBlock } } = this.props;
+    const { pageStore: { checkerboardData, controllBar, choosedBlock, isWin } } = this.props;
+
     return (
       <div className="App">
         <div className="left">
-          Sudoku Game
+          Sudoku Game { isWin ? 'win' : 'not win' }
           <Checkerboard 
             checkerboardData={checkerboardData} 
             blockClick={events.blockClick.bind(this)}

@@ -9,13 +9,14 @@ export class SudokuStore {
 	@observable public checkerboardData: IBlock[][] = [];
   @observable public controllBar: Controll[] = [];
   @observable public choosedBlock: IBlock | null = null;
+  @observable public isWin: boolean = false;
 
   constructor() {
     this.startGame();
   }
 
   @action public startGame() {
-    const sudokuBoard = new SudokuBoard();
+    const sudokuBoard = new SudokuBoard(80);
     this.fullData = Utils.generateCheckerboardState(sudokuBoard.fullArray);
     this.checkerboardData = Utils.generateCheckerboardState(sudokuBoard.incompleteArray);
     this.controllBar = controllKeys.map(key => new Controll(key));
@@ -82,7 +83,22 @@ export class SudokuStore {
         return col;
       })
       return row;
-    })
+    });
+
+    this.isOver();
+  }
+
+  @action public isOver() {
+    let isWin = true;
+    this.checkerboardData.forEach(row => {
+      row.forEach(col => {
+        if (!col.num) {
+          isWin = false;
+        }
+      });
+    });
+
+    this.isWin = isWin;
   }
 }
 

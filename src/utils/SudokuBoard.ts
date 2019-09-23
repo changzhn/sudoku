@@ -26,12 +26,12 @@ export default class SudokuStore {
 	public fullArray: number[][];
 	public incompleteArray: Array<Array<number | null>>;
 
-	constructor() {
+	constructor(num?: number) {
 		this.grids = this.generateGrids();
 		this.fillFirstRow();
     this.fillRows();
 		this.fullArray = this.toArray() as number[][];
-		this.incompleteArray = this.digHoles(30);
+		this.incompleteArray = this.digHoles(num || 30);
 
 		console.log(this.fullArray, this.incompleteArray)
 	}
