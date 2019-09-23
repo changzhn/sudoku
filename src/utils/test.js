@@ -7,36 +7,17 @@ class Utils {
 
   static randomOne2Nine() {
     const nums = [...baseNums];
-    Array(10).fill(0).forEach(() => {
-      const start = Utils.random(0, 8);
-      const end = Utils.random(0, 8);
-      [nums[start], nums[end]] = [nums[end], nums[start]];
-    });
+    Utils.randomArray(nums);
     return nums;
   }
-}
 
-class Palace {
-  constructor(palaceNum) {
-    this.palaceNum = palaceNum;
-    this.rowIdxStart = (Math.ceil(palaceNum / 3) - 1) * 3;
-    this.rowIdxEnd = this.rowIdxStart + 3;
-
-    let colRest = palaceNum % 3;
-    if (colRest === 0) {
-      colRest = 3;
-    }
-    this.colIdxStart = (colRest - 1) * 3;
-    this.colIdxEnd = this.colIdxStart + 3;
-  }
-
-  // reduceNum(num) {
-  //   this.palaceAvailableNums = this.palaceAvailableNums.filter(base => base !== num);
-  // }
-
-  static calcBelongTo(rowIdx, colIdx) {
-    const palaceNum = Math.floor(rowIdx / 3) * 3 + Math.floor(colIdx / 3) + 1;
-    return palaceNum;
+  static randomArray(array) {
+    const len = array.length - 1;
+    Array(10).fill(0).forEach(() => {
+      const start = Utils.random(0, len);
+      const end = Utils.random(0, len);
+      [array[start], array[end]] = [array[end], array[start]];
+    });
   }
 }
 
@@ -45,69 +26,111 @@ class Grid {
     this.rowIdx = rowIdx;
     this.colIdx = colIdx;
     this.num = num;
-    this.belongToPalace = null;
+    this.belongToPalace = this._belongToPalace(rowIdx, colIdx);
+    this.availabelNums = [];
+    this.availabelIdx = 0;
+  }
+
+  _belongToPalace(rowIdx, colIdx) {
+    const palaceNum = Math.floor(rowIdx / 3) * 3 + Math.floor(colIdx / 3) + 1;
+    return palaceNum;
+  }
+
+  next() {
+    this.availabelIdx += 1
+    return this.availabelNums[this.availabelIdx];
   }
 }
 
 class Board {
   constructor() {
-    this.palaces = this.generatePalace();
     this.grids = this.generateGrids();
-    this.fillPalaceRandom(1, 5, 9);
-    this.fillPalaceStep(2, 3, 4, 6, 7, 8);
-
-    // FIXME:
+    this.fillFirstRow();
+    this.fillRows();
     let array = this.toArray();
     return array;
-  }
-
-  generatePalace() {
-    const palaces = baseNums.map(idx => new Palace(idx));
-    return palaces;
   }
 
   generateGrids() {
     const grids = Array(9).fill(0).map((row, rowIdx) => (
       Array(9).fill(0).map((col, colIdx) => {
         const grid = new Grid(rowIdx, colIdx, null);
-        grid.belongToPalace = this.palaces[Palace.calcBelongTo(rowIdx, colIdx) - 1];
         return grid;
       })
     ));
     return grids;
   }
 
-  fillPalaceRandom(...palaceNums) {
-    palaceNums.forEach(palaceNum => {
-      const palace = this.palaces[palaceNum - 1];
-      const { rowIdxStart, rowIdxEnd, colIdxStart, colIdxEnd } = palace;
-      const randomNums = Utils.randomOne2Nine();
-      for(let i = rowIdxStart; i < rowIdxEnd; i++) {
-        for(let j = colIdxStart; j < colIdxEnd; j++) {
-          this.grids[i][j].num = randomNums.pop();
-        }
-      }
+  fillFirstRow() {
+    const randomNums = Utils.randomOne2Nine(); 
+    this.grids[0].forEach(grid => {
+      grid.num = randomNums.pop();
     });
   }
 
-  fillPalaceStep(...palaceNums) {
-    palaceNums.forEach(palaceNum => {
-      const palace = this.palaces[palaceNum - 1];
-      const { rowIdxStart, rowIdxEnd, colIdxStart, colIdxEnd } = palace;
-      for(let i = rowIdxStart; i < rowIdxEnd; i++) {
-        for(let j = colIdxStart; j < colIdxEnd; j++) {
-          const grid = this.grids[i][j];
-          const availabelNums = this.getAvailableNums(grid);
-          if (availabelNums.length) {
-            grid.num = availabelNums[0];
-          }
+  fillRows(startRowIdx, startColIdx) {
+    for(let i = 1; i < 9; i++) {
+      if (i < startRowIdx) {
+        continue;
+      }
+      for(let j = 0; j < 9; j++) {
+        if (i === startRowIdx && j < startColIdx) {
+          continue;
+        }
+        const grid = this.grids[i][j];
+        const availabelNums = this.getAvailableNums(grid);
+        if (availabelNums.length) {
+          grid.availabelNums = availabelNums;
+          grid.num = availabelNums[grid.availabelIdx];
+        } else {
+          const { rowIdx: a, colIdx: b } = this.toFlashBack(grid);
+          return this.fillRows(a, b);
         }
       }
-    });
+    }
+  }
+
+  toFlashBack(grid) {
+    const { rowIdx, colIdx } = grid;
+    if (colIdx !== 0) {
+      // 列
+      const prevGrid = this.grids[rowIdx][colIdx - 1];
+      const isSucc = this.fillNextNum(prevGrid);
+      if (!isSucc) {
+        return this.toFlashBack(prevGrid)
+      }
+    } else {
+      // 行
+      this.grids[rowIdx - 1].forEach(grid => grid.num = null);
+
+      const prevGrid = this.grids[rowIdx - 1][0];
+      const isSucc = this.fillNextNum(prevGrid);
+      if (!isSucc) {
+        console.log('回溯上一行失败');
+      }
+
+      return {
+        rowIdx: prevGrid.rowIdx,
+        colIdx: prevGrid.colIdx,
+      };
+    }
+
+    return {
+      rowIdx,
+      colIdx,
+    };
+  }
+
+  fillNextNum(grid) {
+    const nextNum = grid.next();
+    grid.num = nextNum;
+    if (!nextNum) {
+      grid.availabelIdx = 0;
+    }
+    return !!nextNum;
   }
 
   getAvailableNums({ rowIdx: targetRowIdx, colIdx: targetColIdx, belongToPalace }) {
-    const { palaceNum: targetPalaceNum } = belongToPalace;
     const occupiedRowNums = [];
     const occupiedColNums = [];
     const occupiedPalaceNums = [];
@@ -121,7 +144,7 @@ class Board {
           if (colIdx === targetColIdx) {
             occupiedColNums.push(num);
           }
-          if (palaceNum === targetPalaceNum) {
+          if (palaceNum === belongToPalace) {
             occupiedPalaceNums.push(num);
           }
         }
@@ -131,6 +154,9 @@ class Board {
     const occupiedNums = new Set([...occupiedRowNums, ...occupiedColNums, ...occupiedPalaceNums]);
     const allNums = new Set(baseNums);
     const availabelNums = [...new Set([...allNums].filter(x => !occupiedNums.has(x)))];
+    if (availabelNums.length) {
+      Utils.randomArray(availabelNums);
+    }
     return availabelNums;
   }
 
@@ -139,4 +165,5 @@ class Board {
   }
 }
 
-console.log(new Board())
+Array(10).fill(0).forEach(() => 
+console.log(new Board()))
