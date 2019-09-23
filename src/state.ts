@@ -1,16 +1,16 @@
 import { observable, action } from "mobx";
-import { initState, total } from "./initSquare";
 import Utils, { Controll } from './utils';
 import { IBlock } from './utils/interface';
 import { controllKeys } from './utils/constants';
+import SudokuBoard from './utils/SudokuBoard';
 
 export class SudokuStore {
-	@observable public checkerboardData: IBlock[][] = Utils.generateCheckerboardState(initState);
+	@observable public checkerboardData: IBlock[][] = Utils.generateCheckerboardState(new SudokuBoard().array);
   @observable public controllBar: Controll[] = Utils.generateControllBar();
   @observable public choosedBlock: IBlock | null = null;
 
   @action public startGame() {
-    this.checkerboardData = Utils.generateCheckerboardState(total);
+    this.checkerboardData = Utils.generateCheckerboardState(new SudokuBoard().array);
     this.controllBar = controllKeys.map(key => new Controll(key));
     this.choosedBlock = null;
   }

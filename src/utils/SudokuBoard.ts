@@ -21,13 +21,15 @@ export class Grid {
 	}
 }
 
-export class SudokuStore {
+export default class SudokuStore {
   public grids: Grid[][];
+  public array: number[][];
 
 	constructor() {
 		this.grids = this.generateGrids();
 		this.fillFirstRow();
-		this.fillRows();
+    this.fillRows();
+    this.array = this.toArray() as number[][];
 	}
 
 	public generateGrids() {
