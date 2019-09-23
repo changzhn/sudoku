@@ -1,5 +1,5 @@
 import { observable, action } from "mobx";
-import someState, { initState } from "./initSquare";
+import { initState, half, total } from "./initSquare";
 import { IBlock } from './interface';
 
 export const rowKeys = Array(9).fill(0).map((_, idx) => idx);
@@ -53,7 +53,7 @@ export class SudokuStore {
   @observable public choosedBlock: IBlock | null = null;
 
   @action public startGame() {
-    this.checkerboardData = createCheckerboardState(someState);
+    this.checkerboardData = createCheckerboardState(total);
     this.controllBar = controllKeys.map(key => new Controll(key));
     this.choosedBlock = null;
   }
