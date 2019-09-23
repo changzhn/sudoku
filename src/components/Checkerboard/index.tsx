@@ -1,10 +1,8 @@
 import * as React from 'react';
 import './index.css';
 import classnames from 'classnames';
-import { IBlock } from '../../interface';
-
-export const rownames = '123456789';
-export const colnames = 'ABCDEFGHI';
+import { IBlock } from '../../utils/interface';
+import { rownames, colnames } from '../../utils/constants';
 
 interface IProps {
   checkerboardData: IBlock[][];
@@ -17,7 +15,7 @@ const Checkerboard: React.SFC<IProps> = ({ checkerboardData, blockClick }) => {
     <div className="checkerboard">
       <div className="coordinate-row">
         {
-          colnames.split('').map(key => (
+          colnames.map(key => (
             <span key={key} className="coordinate-block">{ key }</span>
           ))
         }
@@ -55,7 +53,7 @@ const Checkerboard: React.SFC<IProps> = ({ checkerboardData, blockClick }) => {
       }
       <div className="coordinate-col">
         {
-          rownames.split('').map(key => (
+          rownames.map(key => (
             <span key={key} className="coordinate-block">{ key }</span>
           ))
         }

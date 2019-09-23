@@ -10,7 +10,7 @@ const GameStatus: React.SFC<IProps> = ({ start }) => {
   return (
     <div className="game-status-container">
       <div className="game-user">
-        <img className="avatar" src={avatar} />
+        <img className="avatar" src={avatar} alt="avatar" />
         <span>changzhenan</span>
       </div>
       <button className="btn btn-primary btn-sm" onClick={start}>开始</button> &nbsp;

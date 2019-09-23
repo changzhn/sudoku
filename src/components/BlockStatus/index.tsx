@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { IBlock } from '../../interface';
-import { Controll } from '../../state';
-import { rownames, colnames } from '../Checkerboard';
+import { IBlock } from '../../utils/interface';
+import { Controll } from '../../utils';
+import { rownames, colnames } from '../../utils/constants';
 
 interface IProps {
   choosedBlock: IBlock | null;

@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Controll } from '../../state';
+import { Controll } from '../../utils';
 import './index.css';
 import classnames from 'classnames';
-import { IBlock } from '../../interface';
+import { IBlock } from '../../utils/interface';
 
 interface IProps {
   controllBar: Controll[];

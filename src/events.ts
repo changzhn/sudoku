@@ -1,6 +1,6 @@
 import { App } from './App';
-import { Controll } from './state';
-import { IBlock } from './interface';
+import { Controll } from './utils';
+import { IBlock } from './utils/interface';
 
 export function startGame(this: App) {
   this.props.pageStore.startGame();

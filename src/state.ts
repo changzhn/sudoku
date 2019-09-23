@@ -1,59 +1,16 @@
 import { observable, action } from "mobx";
-import { initState, half, total } from "./initSquare";
-import { IBlock } from './interface';
-
-export const rowKeys = Array(9).fill(0).map((_, idx) => idx);
-export const colKeys = rowKeys;
-export const controllKeys = rowKeys.map(n => n + 1);
-
-function getPalaceKey(rowKey: number, colKey: number): number {
-  const palaceKey = Math.floor(rowKey / 3) * 3 + Math.floor(colKey / 3) + 1;
-  return palaceKey;
-}
-
-function createCheckerboardState(nums: Array<Array<number | null>>) {
-  const checkerboardData: any = nums.map((row, rowIdx) => {
-    const rowKey = rowKeys[rowIdx];
-    return row.map((col, colIdx) => {
-      const colKey = colKeys[colIdx];
-      return createBlock({ num: col, rowKey, colKey });
-    });
-  });
-  return checkerboardData;
-}
-
-const createBlock: (opt: { num: number | null, rowKey: number, colKey: number }) => IBlock = 
-  ({ num, rowKey, colKey }) => {
-    const rowIdx = rowKeys.indexOf(rowKey);
-    const colIdx = colKeys.indexOf(colKey);
-    return {
-      num,
-      rowKey: rowIdx,
-      colKey: colIdx,
-      palaceKey: getPalaceKey(rowIdx, colIdx),
-      isChoosed: false,
-      isInitBlock: !!num,
-    };
-  };
-
-export class Controll {
-	@observable public num: number | null;
-	@observable public status: boolean = false;
-
-	constructor(num: number) {
-		this.num = num;
-	}
-}
-
-const controllBar: Controll[] = controllKeys.map(key => new Controll(key));
+import { initState, total } from "./initSquare";
+import Utils, { Controll } from './utils';
+import { IBlock } from './utils/interface';
+import { controllKeys } from './utils/constants';
 
 export class SudokuStore {
-	@observable public checkerboardData: IBlock[][] = createCheckerboardState(initState);
-  @observable public controllBar: Controll[] = controllBar;
+	@observable public checkerboardData: IBlock[][] = Utils.generateCheckerboardState(initState);
+  @observable public controllBar: Controll[] = Utils.generateControllBar();
   @observable public choosedBlock: IBlock | null = null;
 
   @action public startGame() {
-    this.checkerboardData = createCheckerboardState(total);
+    this.checkerboardData = Utils.generateCheckerboardState(total);
     this.controllBar = controllKeys.map(key => new Controll(key));
     this.choosedBlock = null;
   }
