@@ -79,47 +79,49 @@ export default class SudokuStore {
 		}
 	}
 
-	// FIXME: 整理
+	// 回溯
 	public toFlashBack(grid: Grid): any {
-		const { rowIdx, colIdx } = grid;
-		if (colIdx !== 0) {
-			// 列
-			const prevGrid = this.grids[rowIdx][colIdx - 1];
-			const isSucc = this.fillNextNum(prevGrid);
-			if (!isSucc) {
-				return this.toFlashBack(prevGrid);
-			}
+		const { colIdx } = grid;
 
-			return {
-				rowIdx,
-				colIdx
-			};
-
+		if (colIdx === 0) {
+			return this.toFlashBackByRow(grid);
 		} else {
-			// 行
-			let isSucc = false;
-			let prevRowIdx = rowIdx;
-			while(!isSucc) {
-				prevRowIdx--;
-				if (prevRowIdx === 0) {
-					return {
-						rowIdx: 1,
-						colIdx: 0,
-					}
-				}
-				// 清空上一行数据
-				this.grids[prevRowIdx].forEach(grid => (grid.num = null));
-				const prevGrid = this.grids[prevRowIdx][0];
-				isSucc = this.fillNextNum(prevGrid);
-				return {
-					rowIdx: prevGrid.rowIdx,
-					colIdx: prevGrid.colIdx
-				};
-			}
+			return this.toFlashBackByCol(grid);
 		}
 	}
 
-	fillNextNum(grid: Grid) {
+	// 按列
+	public toFlashBackByCol(grid: Grid): any {
+		const { rowIdx, colIdx } = grid;
+		const prevGrid = this.grids[rowIdx][colIdx - 1];
+		const isSucc = this.fillNextNum(prevGrid);
+		if (!isSucc) {
+			return this.toFlashBack(prevGrid);
+		}
+		return {
+			rowIdx,
+			colIdx
+		};
+	}
+
+	// 按行
+	public toFlashBackByRow(grid: Grid): any {
+		const { rowIdx } = grid;
+		let prevRowIdx = rowIdx - 1;
+		// 清空上一行数据
+		this.grids[prevRowIdx].forEach(grid => (grid.num = null));
+		const prevGrid = this.grids[prevRowIdx][0];
+		const isSucc = this.fillNextNum(prevGrid);
+		if (!isSucc) {
+			return this.toFlashBackByRow(prevGrid);
+		}
+		return {
+			rowIdx: prevGrid.rowIdx,
+			colIdx: prevGrid.colIdx
+		};
+	}
+
+	public fillNextNum(grid: Grid) {
 		const nextNum = grid.next();
 		grid.num = nextNum;
 		if (!nextNum) {
@@ -128,7 +130,7 @@ export default class SudokuStore {
 		return !!nextNum;
 	}
 
-	getAvailableNums({
+	public getAvailableNums({
 		rowIdx: targetRowIdx,
 		colIdx: targetColIdx,
 		belongToPalace: targetBelongToPalaca
@@ -168,11 +170,11 @@ export default class SudokuStore {
 		return availabelNums;
 	}
 
-	toArray() {
+	public toArray() {
 		return this.grids.map(row => row.map(grid => grid.num));
 	}
 
-	digHoles(num: number) {
+	public digHoles(num: number) {
 		const fullArray: Array<Array<number | null>> = this.fullArray.map(row => row.map(grid => grid));
 		const holes = 81 - num;
 		let digs = 0;
@@ -184,6 +186,6 @@ export default class SudokuStore {
 				digs++;
 			}
 		}
-		return fullArray
+		return fullArray;
 	}
 }
