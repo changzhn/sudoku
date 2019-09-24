@@ -16,11 +16,12 @@ export class SudokuStore {
   }
 
   @action public startGame() {
-    const sudokuBoard = new SudokuBoard(80);
-    this.fullData = Utils.generateCheckerboardState(sudokuBoard.fullArray);
-    this.checkerboardData = Utils.generateCheckerboardState(sudokuBoard.incompleteArray);
+    const sudokuBoard = new SudokuBoard(30);
+    this.fullData = Utils.generateCheckerboardState(sudokuBoard.incompleteArray);
+    this.checkerboardData = Utils.generateCheckerboardState(sudokuBoard.fullArray);
     this.controllBar = controllKeys.map(key => new Controll(key));
     this.choosedBlock = null;
+    this.isWin = false;
   }
   
   @action public chooseBlock(block: IBlock) {

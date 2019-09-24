@@ -32,8 +32,6 @@ export default class SudokuStore {
     this.fillRows();
 		this.fullArray = this.toArray() as number[][];
 		this.incompleteArray = this.digHoles(num || 30);
-
-		console.log(this.fullArray, this.incompleteArray)
 	}
 
 	public generateGrids() {
@@ -81,6 +79,7 @@ export default class SudokuStore {
 		}
 	}
 
+	// FIXME: 整理
 	public toFlashBack(grid: Grid): any {
 		const { rowIdx, colIdx } = grid;
 		if (colIdx !== 0) {
@@ -90,26 +89,34 @@ export default class SudokuStore {
 			if (!isSucc) {
 				return this.toFlashBack(prevGrid);
 			}
-		} else {
-			// 行
-			this.grids[rowIdx - 1].forEach(grid => (grid.num = null));
-
-			const prevGrid = this.grids[rowIdx - 1][0];
-			const isSucc = this.fillNextNum(prevGrid);
-			if (!isSucc) {
-				console.log("回溯上一行失败");
-			}
 
 			return {
-				rowIdx: prevGrid.rowIdx,
-				colIdx: prevGrid.colIdx
+				rowIdx,
+				colIdx
 			};
-		}
 
-		return {
-			rowIdx,
-			colIdx
-		};
+		} else {
+			// 行
+			let isSucc = false;
+			let prevRowIdx = rowIdx;
+			while(!isSucc) {
+				prevRowIdx--;
+				if (prevRowIdx === 0) {
+					return {
+						rowIdx: 1,
+						colIdx: 0,
+					}
+				}
+				// 清空上一行数据
+				this.grids[prevRowIdx].forEach(grid => (grid.num = null));
+				const prevGrid = this.grids[prevRowIdx][0];
+				isSucc = this.fillNextNum(prevGrid);
+				return {
+					rowIdx: prevGrid.rowIdx,
+					colIdx: prevGrid.colIdx
+				};
+			}
+		}
 	}
 
 	fillNextNum(grid: Grid) {
