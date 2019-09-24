@@ -63,7 +63,47 @@ class Utils {
 				const end = Utils.random(0, len);
 				[array[start], array[end]] = [array[end], array[start]];
 			});
-	}
+  }
+  
+  public static isCorrectData(array: Array<Array<number>>): boolean {
+    const SUM = 45;
+    let isCorrect = true;
+    const sums: any = {};
+
+    function collect(num: number, rowIdx: number, colIdx: number) {
+      const rowKey = `row${rowIdx}`;
+      const colKey = `col${colIdx}`;
+      const palaceKey = `palace${Utils.getPalaceKey(rowIdx, colIdx)}`;
+
+      if (sums[rowKey]) {
+        sums[rowKey] += num;
+      } else {
+        sums[rowKey] = num;
+      }
+
+      if (sums[colKey]) {
+        sums[colKey] += num;
+      } else {
+        sums[colKey] = num;
+      }
+
+      if (sums[palaceKey]) {
+        sums[palaceKey] += num;
+      } else {
+        sums[palaceKey] = num;
+      }
+    }
+
+    array.forEach((row, rowIdx) => row.forEach((grid, colIdx) => collect(grid, rowIdx, colIdx)));
+
+    Object.keys(sums).forEach(key => {
+      if (sums[key] !== SUM) {
+        isCorrect = false;
+      }
+    })
+
+    return isCorrect;
+  }
 }
 
 export default Utils;
