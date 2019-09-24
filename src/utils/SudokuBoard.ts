@@ -69,9 +69,6 @@ export default class SudokuStore {
 					grid.availabelNums = availabelNums;
 					grid.availabelIdx = 0;
 					grid.num = availabelNums[grid.availabelIdx];
-					if (!grid.num) {
-						debugger
-					}
 				} else {
 					const { rowIdx: a, colIdx: b } = this.toFlashBack(grid);
 					return this.fillRows(a, b);
