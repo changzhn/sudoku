@@ -58,10 +58,7 @@ export default class SudokuStore {
 	public fillRows(startRowIdx?: number, startColIdx?: number): any {
     startRowIdx = startRowIdx || 1;
     startColIdx = startColIdx || 0;
-		for (let i = 1; i < 9; i++) {
-			if (i < startRowIdx) {
-				continue;
-			}
+		for (let i = startRowIdx; i < 9; i++) {
 			for (let j = 0; j < 9; j++) {
 				if (i === startRowIdx && j < startColIdx) {
 					continue;
