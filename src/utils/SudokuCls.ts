@@ -4,10 +4,17 @@ import { baseNums } from './constants';
 export class Grid {
   public rowIdx: number;
   public colIdx: number;
-  public num: number | null = null;
+	public showNum: number | null = null;
   public belongToPalace: number;
   public availabelNums: number[] = [];
-  public availabelIdx: number = 0; 
+	public availabelIdx: number = 0; 
+	public status: {
+		isInit: boolean,
+		isChoosed: boolean,
+	} = {
+		isInit: true,
+		isChoosed: false,
+	};
 
 	constructor(rowIdx: number, colIdx: number) {
 		this.rowIdx = rowIdx;
@@ -15,23 +22,45 @@ export class Grid {
 		this.belongToPalace = Utils.getPalaceKey(rowIdx, colIdx);
 	}
 
-	next() {
+	public get num(): number | null {
+		return this.num;
+	}
+
+	public set num(num: number | null) {
+		this.showNum = num;
+		this.num = num;
+	}
+
+	public next() {
 		this.availabelIdx += 1;
 		return this.availabelNums[this.availabelIdx];
 	}
 }
 
-export default class SudokuStore {
-  public grids: Grid[][];
-	public fullArray: number[][];
-	public incompleteArray: Array<Array<number | null>>;
+export default class Sudoku {
+	public grids: Grid[][] = [];
+	public numberOfMumbers?: number;
 
-	constructor(num?: number) {
+	/**
+	 * @param numberOfMumbers 开局留下的个数
+	 */
+	constructor(numberOfMumbers?: number) {
+		this.numberOfMumbers = numberOfMumbers;
+		this.reset();
+	}
+
+	public get fullArray() {
+		return this.toArray('num');
+	}
+
+	public get incompleteArray() {
+		return this.toArray('showNum');
+	}
+
+	public reset() {
 		this.grids = this.generateGrids();
-		this.fillFirstRow();
-    this.fillRows();
-		this.fullArray = this.toArray() as number[][];
-		this.incompleteArray = this.digHoles(num || 30);
+		this.fill();
+		this.digHoles();
 	}
 
 	public generateGrids() {
@@ -46,6 +75,11 @@ export default class SudokuStore {
 					})
 			);
 		return grids;
+	}
+
+	public fill() {
+		this.fillFirstRow();
+    this.fillRows();
 	}
 
 	public fillFirstRow() {
@@ -168,22 +202,21 @@ export default class SudokuStore {
 		return availabelNums;
 	}
 
-	public toArray() {
-		return this.grids.map(row => row.map(grid => grid.num));
+	public toArray(key: 'num' | 'showNum') {
+		return this.grids.map(row => row.map(grid => grid[key]));
 	}
 
-	public digHoles(num: number) {
-		const fullArray: Array<Array<number | null>> = this.fullArray.map(row => row.map(grid => grid));
-		const holes = 81 - num;
+	public digHoles() {
+		const holes = 81 - (this.numberOfMumbers || 30);
 		let digs = 0;
 		while(digs < holes) {
 			const i = Utils.random(0, 8);
 			const j = Utils.random(0, 8);
-			if (fullArray[i][j]) {
-				fullArray[i][j] = null;
+			if (this.grids[i][j]) {
+				this.grids[i][j].showNum = null;
+				this.grids[i][j].status.isInit = false;
 				digs++;
 			}
 		}
-		return fullArray;
 	}
 }
