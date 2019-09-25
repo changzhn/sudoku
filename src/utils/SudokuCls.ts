@@ -1,15 +1,16 @@
 import Utils from './index';
 import { baseNums } from './constants';
+import { observable } from "mobx";
 
 export class Grid {
   public rowIdx: number;
 	public colIdx: number;
 	public _num: number | null = null;
-	public showNum: number | null = null;
+	@observable public showNum: number | null = null;
   public belongToPalace: number;
   public availabelNums: number[] = [];
 	public availabelIdx: number = 0; 
-	public status: {
+	@observable public status: {
 		isInit: boolean,
 		isChoosed: boolean,
 	} = {
@@ -39,7 +40,7 @@ export class Grid {
 }
 
 export default class Sudoku {
-	public grids: Grid[][] = [];
+	@observable public grids: Grid[][] = [];
 	public numberOfMumbers?: number;
 
 	/**
@@ -69,11 +70,8 @@ export default class Sudoku {
 			.fill(0)
 			.map((row, rowIdx) =>
 				Array(9)
-					.fill(0)
-					.map((col, colIdx) => {
-						const grid = new Grid(rowIdx, colIdx);
-						return grid;
-					})
+				.fill(0)
+				.map((col, colIdx) => new Grid(rowIdx, colIdx))
 			);
 		return grids;
 	}
