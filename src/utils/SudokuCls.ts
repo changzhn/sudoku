@@ -3,7 +3,8 @@ import { baseNums } from './constants';
 
 export class Grid {
   public rowIdx: number;
-  public colIdx: number;
+	public colIdx: number;
+	public _num: number | null = null;
 	public showNum: number | null = null;
   public belongToPalace: number;
   public availabelNums: number[] = [];
@@ -23,12 +24,12 @@ export class Grid {
 	}
 
 	public get num(): number | null {
-		return this.num;
+		return this._num;
 	}
 
 	public set num(num: number | null) {
 		this.showNum = num;
-		this.num = num;
+		this._num = num;
 	}
 
 	public next() {
@@ -98,7 +99,7 @@ export default class Sudoku {
 					continue;
 				}
 				const grid = this.grids[i][j];
-				const availabelNums = this.getAvailableNums(grid);
+				const availabelNums = this.getAvailableNums(grid, 'num');
 				if (availabelNums.length) {
 					grid.availabelNums = availabelNums;
 					grid.availabelIdx = 0;
@@ -166,22 +167,22 @@ export default class Sudoku {
 		rowIdx: targetRowIdx,
 		colIdx: targetColIdx,
 		belongToPalace: targetBelongToPalaca
-	}: Grid) {
+	}: Grid, key: 'num' | 'showNum') {
 		const occupiedRowNums: number[] = [];
 		const occupiedColNums: number[] = [];
 		const occupiedPalaceNums: number[] = [];
 		this.grids.forEach(row => {
 			row.forEach(grid => {
-				if (grid.num) {
-					const { rowIdx, colIdx, belongToPalace, num } = grid;
+				if (grid[key]) {
+					const { rowIdx, colIdx, belongToPalace } = grid;
 					if (rowIdx === targetRowIdx) {
-						occupiedRowNums.push(num);
+						occupiedRowNums.push(grid[key] as number);
 					}
 					if (colIdx === targetColIdx) {
-						occupiedColNums.push(num);
+						occupiedColNums.push(grid[key] as number);
 					}
 					if (belongToPalace === targetBelongToPalaca) {
-						occupiedPalaceNums.push(num);
+						occupiedPalaceNums.push(grid[key] as number);
 					}
 				}
 			});

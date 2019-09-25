@@ -17,19 +17,19 @@ interface IProps {
 export class App extends Component<IProps> {
 
   render() {
-    const { pageStore: { checkerboardData, controllBar, choosedBlock, isWin } } = this.props;
+    const { pageStore: { sudoku, controllBar, choosedGrid, isWin } } = this.props;
 
     return (
       <div className="App">
         <div className="left">
           Sudoku Game { isWin ? 'win' : 'not win' }
           <Checkerboard 
-            checkerboardData={checkerboardData} 
+            sudoku={sudoku} 
             blockClick={events.blockClick.bind(this)}
           />
           <ControllBar 
             controllBar={controllBar} 
-            choosedBlock={choosedBlock}
+            choosedGrid={choosedGrid}
             barClick={events.barClick.bind(this)}
           />
         </div>
@@ -38,8 +38,8 @@ export class App extends Component<IProps> {
           <GameStatus 
             start={events.startGame.bind(this)}
           />
-          {choosedBlock && <BlockStatus 
-            choosedBlock={choosedBlock} 
+          {choosedGrid && <BlockStatus 
+            choosedGrid={choosedGrid} 
             controllBar={controllBar} 
           />}
         </div>

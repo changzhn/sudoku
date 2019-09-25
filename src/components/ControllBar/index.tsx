@@ -2,18 +2,18 @@ import * as React from 'react';
 import { Controll } from '../../utils';
 import './index.css';
 import classnames from 'classnames';
-import { IBlock } from '../../utils/interface';
+import { Grid } from '../../utils/SudokuCls';
 
 interface IProps {
   controllBar: Controll[];
-  choosedBlock: IBlock | null;
+  choosedGrid: Grid | null;
   barClick: (col: Controll) => void;
 }
 
-const ControllBar: React.SFC<IProps> = ({ controllBar, barClick, choosedBlock }) => {
+const ControllBar: React.SFC<IProps> = ({ controllBar, barClick, choosedGrid }) => {
   const clearCls = classnames({
     'controll-item': true,
-    'clear': choosedBlock && choosedBlock.num,
+    'clear': choosedGrid && choosedGrid.num,
   });
   return (
     <div className="controll-bar">
