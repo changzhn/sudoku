@@ -3,13 +3,14 @@ import './index.css';
 import classnames from 'classnames';
 import { rownames, colnames } from '../../utils/constants';
 import SudokuCls, { Grid } from '../../utils/SudokuCls';
+import { observer } from 'mobx-react';
 
 interface IProps {
   sudoku: SudokuCls;
   blockClick: (block: Grid) => void;
 }
 
-const Checkerboard: React.SFC<IProps> = ({ sudoku, blockClick }) => {
+const Checkerboard: React.SFC<IProps> = observer(({ sudoku, blockClick }) => {
 
   return (
     <div className="checkerboard">
@@ -60,6 +61,6 @@ const Checkerboard: React.SFC<IProps> = ({ sudoku, blockClick }) => {
       </div>
     </div>
   );
-};
+});
 
 export default Checkerboard;
