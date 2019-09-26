@@ -8,7 +8,7 @@ interface IProps {
   controllBar: Controll[];
 }
 
-const BlockStatus: React.SFC<IProps> = ({ choosedGrid }) => {
+const GridStatus: React.SFC<IProps> = ({ choosedGrid }) => {
   const { rowIdx, colIdx, num } = choosedGrid as Grid;
   return (
     <div className="game-status-container">
@@ -19,4 +19,4 @@ const BlockStatus: React.SFC<IProps> = ({ choosedGrid }) => {
   );
 };
 
-export default BlockStatus;
+export default GridStatus;

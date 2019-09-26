@@ -11,7 +11,7 @@ export function gridClick(this: App, grid: Grid) {
     return;
   }
   const { pageStore } = this.props;
-  pageStore.chooseBlock(grid);
+  pageStore.chooseGrid(grid);
 }
 
 export function barClick(this: App, controll: Controll) {

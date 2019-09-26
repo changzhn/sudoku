@@ -20,7 +20,7 @@ export class SudokuStore {
     this.isWin = false;
   }
   
-  @action public chooseBlock(grid: Grid) {
+  @action public chooseGrid(grid: Grid) {
     if (this.choosedGrid) {
       this.choosedGrid.status.isChoosed = false;
     }
