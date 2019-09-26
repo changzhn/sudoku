@@ -3,6 +3,7 @@ import Checkerboard from './components/Checkerboard';
 import ControllBar from './components/ControllBar';
 import GridStatus from './components/GridStatus';
 import GameStatus from './components/GameStatus';
+import History from './components/History';
 import { observer } from 'mobx-react';
 import pageStore, { SudokuStore } from './state';
 import * as events from './events';
@@ -17,7 +18,7 @@ interface IProps {
 export class App extends Component<IProps> {
 
   render() {
-    const { pageStore: { sudoku, controllBar, choosedGrid, isWin } } = this.props;
+    const { pageStore: { sudoku, controllBar, choosedGrid, isWin, history } } = this.props;
 
     return (
       <div className="App">
@@ -38,6 +39,11 @@ export class App extends Component<IProps> {
           <GameStatus 
             start={events.startGame.bind(this)}
           />
+          {history.length ? 
+          <History 
+            history={history} 
+            stepClick={events.stepClick.bind(this)}
+          /> : null}
           {choosedGrid && <GridStatus 
             choosedGrid={choosedGrid} 
             controllBar={controllBar} 

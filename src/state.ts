@@ -3,11 +3,19 @@ import Utils, { Controll } from './utils';
 import { controllKeys } from './utils/constants';
 import SudokuCls, { Grid } from './utils/SudokuCls';
 
+export interface IStep {
+  step: number | string;
+  rowIdx: number; 
+  colIdx: number; 
+  prevShowNum: number | null;
+};
+
 export class SudokuStore {
   @observable public sudoku: SudokuCls = new SudokuCls(0);
   @observable public controllBar: Controll[] = [];
   @observable public choosedGrid: Grid | null = null;
   @observable public isWin: boolean = false;
+  @observable public history: IStep[] = [];
 
   constructor() {
     this.startGame();
@@ -42,8 +50,32 @@ export class SudokuStore {
       return;
     }
     const { rowIdx, colIdx } = this.choosedGrid;
+    this.addGrid2History(this.choosedGrid);
     this.sudoku.grids[rowIdx][colIdx].showNum = num;
     this.isOver();
+  }
+
+  @action public addGrid2History({ rowIdx, colIdx, showNum }: Grid): void {
+    const step: IStep = {
+      step: this.history.length + 1,
+      rowIdx,
+      colIdx,
+      prevShowNum: showNum,
+    };
+    this.history.unshift(step);
+  }
+
+  @action public resetFromHistory(step: IStep) {
+    const history = [...this.history];
+
+    while(step !== history[0]) {
+      const prevStep = history.shift();
+      const { rowIdx, colIdx, prevShowNum } = prevStep as IStep;
+      this.sudoku.grids[rowIdx][colIdx].showNum = prevShowNum;
+    }
+
+    this.choosedGrid = null;
+    this.history = history;
   }
 
   @action public isOver() {

@@ -1,0 +1,9 @@
+.history-container {
+  height: 120px;
+  overflow-y: scroll;
+}
+
+.history-step {
+  color: cadetblue;
+  cursor: pointer;
+}
