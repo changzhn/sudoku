@@ -36,7 +36,7 @@ const ControllBar: React.SFC<IProps> = ({ controllBar, barClick, choosedGrid }) 
       <span 
         className={clearCls}
         onClick={() => barClick({ status: true, num: null })}
-      >X</span>
+      >del</span>
     </div>
   );
 };

@@ -20,12 +20,12 @@ export class SudokuStore {
     this.isWin = false;
   }
   
-  @action public chooseBlock(block: Grid) {
+  @action public chooseBlock(grid: Grid) {
     if (this.choosedGrid) {
       this.choosedGrid.status.isChoosed = false;
     }
-    block.status.isChoosed = true;
-    this.choosedGrid = block;
+    grid.status.isChoosed = true;
+    this.choosedGrid = grid;
     this.calcControllBar();
   }
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Checkerboard from './components/Checkerboard';
 import ControllBar from './components/ControllBar';
-import BlockStatus from './components/BlockStatus';
+import GridStatus from './components/GridStatus';
 import GameStatus from './components/GameStatus';
 import { observer } from 'mobx-react';
 import pageStore, { SudokuStore } from './state';
@@ -25,7 +25,7 @@ export class App extends Component<IProps> {
           Sudoku Game { isWin ? 'win' : 'not win' }
           <Checkerboard 
             sudoku={sudoku} 
-            blockClick={events.blockClick.bind(this)}
+            gridClick={events.gridClick.bind(this)}
           />
           <ControllBar 
             controllBar={controllBar} 
@@ -38,7 +38,7 @@ export class App extends Component<IProps> {
           <GameStatus 
             start={events.startGame.bind(this)}
           />
-          {choosedGrid && <BlockStatus 
+          {choosedGrid && <GridStatus 
             choosedGrid={choosedGrid} 
             controllBar={controllBar} 
           />}

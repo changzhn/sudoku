@@ -7,10 +7,10 @@ import { observer } from 'mobx-react';
 
 interface IProps {
   sudoku: SudokuCls;
-  blockClick: (block: Grid) => void;
+  gridClick: (grid: Grid) => void;
 }
 
-const Checkerboard: React.SFC<IProps> = observer(({ sudoku, blockClick }) => {
+const Checkerboard: React.SFC<IProps> = observer(({ sudoku, gridClick }) => {
 
   return (
     <div className="checkerboard">
@@ -32,7 +32,7 @@ const Checkerboard: React.SFC<IProps> = observer(({ sudoku, blockClick }) => {
             <div key={rowIdx} className={cls}>
               {
                 row.map((grid, colIdx) => {
-                  const blockCls = classnames({
+                  const gridCls = classnames({
                     'checkerboard-block': true,
                     'is-choosed': grid.status.isChoosed,
                     'is-inited': grid.status.isInit,
@@ -40,8 +40,8 @@ const Checkerboard: React.SFC<IProps> = observer(({ sudoku, blockClick }) => {
                   return (
                     <span 
                       key={colIdx} 
-                      className={blockCls}
-                      onClick={() => blockClick(grid)}
+                      className={gridCls}
+                      onClick={() => gridClick(grid)}
                     >
                       { grid.showNum }
                     </span>

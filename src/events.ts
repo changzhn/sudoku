@@ -6,7 +6,7 @@ export function startGame(this: App) {
   this.props.pageStore.startGame();
 }
 
-export function blockClick(this: App, grid: Grid) {
+export function gridClick(this: App, grid: Grid) {
   if (grid.status.isInit) {
     return;
   }
