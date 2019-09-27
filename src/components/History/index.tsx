@@ -2,6 +2,7 @@ import * as React from 'react';
 import { IStep } from '../../state';
 import { observer } from 'mobx-react';
 import './index.css';
+import { rownames, colnames } from '../../utils/constants';
 
 interface IProps {
   history: IStep[];
@@ -14,7 +15,11 @@ const History: React.SFC<IProps> = observer(({ history, stepClick }) => {
       {
         history.map(step => (
           <div key={step.step} className="history-step" onClick={() => stepClick(step)}>
-            第{step.step}步
+            {
+              step.step === 0 ? 
+              `开局` :
+              `第${step.step}步  ${colnames[step.colIdx]} ${rownames[step.rowIdx]}`
+            }
           </div>
         ))
       }

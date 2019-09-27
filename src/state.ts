@@ -26,6 +26,7 @@ export class SudokuStore {
     this.controllBar = controllKeys.map(key => new Controll(key));
     this.choosedGrid= null;
     this.isWin = false;
+    this.history = [];
   }
   
   @action public chooseGrid(grid: Grid) {
@@ -56,8 +57,16 @@ export class SudokuStore {
   }
 
   @action public addGrid2History({ rowIdx, colIdx, showNum }: Grid): void {
+    if (!this.history.length) {
+      this.history = [{
+        step: 0,
+        rowIdx,
+        colIdx,
+        prevShowNum: null,
+      }];
+    }
     const step: IStep = {
-      step: this.history.length + 1,
+      step: this.history.length,
       rowIdx,
       colIdx,
       prevShowNum: showNum,
@@ -73,8 +82,16 @@ export class SudokuStore {
       const { rowIdx, colIdx, prevShowNum } = prevStep as IStep;
       this.sudoku.grids[rowIdx][colIdx].showNum = prevShowNum;
     }
-
-    this.choosedGrid = null;
+    if (this.choosedGrid) {
+      this.choosedGrid.status.isChoosed = false;
+    }
+    if (step.step !== 0) {
+      const grid = this.sudoku.grids[step.rowIdx][step.colIdx];
+      this.chooseGrid(grid);
+    } else {
+      this.choosedGrid = null;
+      this.controllBar = controllKeys.map(key => new Controll(key));
+    }
     this.history = history;
   }
 

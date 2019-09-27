@@ -171,16 +171,18 @@ export default class Sudoku {
 		const occupiedPalaceNums: number[] = [];
 		this.grids.forEach(row => {
 			row.forEach(grid => {
-				if (grid[key]) {
-					const { rowIdx, colIdx, belongToPalace } = grid;
-					if (rowIdx === targetRowIdx) {
-						occupiedRowNums.push(grid[key] as number);
-					}
-					if (colIdx === targetColIdx) {
-						occupiedColNums.push(grid[key] as number);
-					}
-					if (belongToPalace === targetBelongToPalaca) {
-						occupiedPalaceNums.push(grid[key] as number);
+				const { rowIdx, colIdx, belongToPalace } = grid;
+				if (!(rowIdx === targetRowIdx && colIdx === targetColIdx)) {
+					if (grid[key]) {
+						if (rowIdx === targetRowIdx) {
+							occupiedRowNums.push(grid[key] as number);
+						}
+						if (colIdx === targetColIdx) {
+							occupiedColNums.push(grid[key] as number);
+						}
+						if (belongToPalace === targetBelongToPalaca) {
+							occupiedPalaceNums.push(grid[key] as number);
+						}
 					}
 				}
 			});
