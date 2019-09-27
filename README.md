@@ -1,5 +1,7 @@
 # sudoku game
 
+在线试玩地址 https://changzhn.github.io/sudoku/
+
 游戏截图
 <img src="./README.assets/Snipaste_01.png" />
 
