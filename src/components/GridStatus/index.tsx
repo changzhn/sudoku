@@ -9,12 +9,12 @@ interface IProps {
 }
 
 const GridStatus: React.SFC<IProps> = ({ choosedGrid }) => {
-  const { rowIdx, colIdx, num } = choosedGrid as Grid;
+  const { rowIdx, colIdx, showNum } = choosedGrid as Grid;
   return (
     <div className="game-status-container">
       <h5>选中元素：</h5>
       <p>位置：{ colnames[colIdx] + ' ' + rownames[rowIdx] }</p>
-      <p>填入：{ num }</p>
+      <p>填入：{ showNum }</p>
     </div>
   );
 };
